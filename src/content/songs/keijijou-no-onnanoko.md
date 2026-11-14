@@ -1,6 +1,6 @@
 ---
 title: "形而上の女の子"
-description: "「形而上の女の子」の歌詞とSoundCloud音源。"
+description: "日常と非日常のあわいにある親密さを描いた、ベッドルームミュージック。"
 featured: false
 published: true
 audioUrl: "https://soundcloud.com/user-462656328/dldt1jrobwsg"

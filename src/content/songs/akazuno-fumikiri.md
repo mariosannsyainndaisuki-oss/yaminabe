@@ -3,7 +3,7 @@ title: "開かずの踏切"
 year: 2026
 key: "E♭"
 bpm: 95
-description: "Rhodesを中心に制作したオリジナル曲。"
+description: "シンプルなバンドサウンドで描く、日常の閉塞感とささやかな希望。"
 featured: true
 published: true
 audioUrl: "https://soundcloud.com/user-462656328/r3irtr89opka"

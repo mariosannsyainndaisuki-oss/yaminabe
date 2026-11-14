@@ -4,7 +4,7 @@ import { join } from 'node:path';
 const directory = 'src/content/songs';
 const files = (await readdir(directory)).filter(name => name.endsWith('.md'));
 const errors = [];
-const allowed = new Set(['title','year','key','bpm','description','featured','published','audioUrl']);
+const allowed = new Set(['title','year','key','bpm','description','linerNotes','featured','published','audioUrl']);
 
 for (const file of files) {
   const source = await readFile(join(directory, file), 'utf8');

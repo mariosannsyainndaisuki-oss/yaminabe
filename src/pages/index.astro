@@ -26,6 +26,7 @@ const songHref = (id: string) => `${base}lyrics/${id}/`;
             <div class="song-actions">
               {song.data.audioUrl && <button class="arrowlink player-trigger" type="button" aria-expanded="false" aria-controls={`player-${i}`} data-audio-url={song.data.audioUrl}>LISTEN <span>＋</span></button>}
               <button class="arrowlink lyrics-trigger" type="button" data-lyrics-url={songHref(song.id)}>READ LYRICS <span>↗</span></button>
+              {song.data.linerNotes && <a class="arrowlink" href={`${songHref(song.id)}#liner-notes`}>LINER NOTES <span>↗</span></a>}
               <a class="song-permalink" href={songHref(song.id)} aria-label={`${song.data.title}の歌詞ページへのリンク`}>DIRECT LINK ↗</a>
             </div>
             {song.data.audioUrl && <div class="player-panel" id={`player-${i}`} hidden><div class="player-mount"></div><a class="player-external" href={song.data.audioUrl} target="_blank" rel="noopener noreferrer">OPEN IN SOUNDCLOUD ↗</a></div>}
