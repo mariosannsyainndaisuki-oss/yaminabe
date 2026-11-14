@@ -24,10 +24,11 @@ const songHref = (id: string) => `${base}lyrics/${id}/`;
             <h3>{song.data.title}</h3>
             {song.data.description && <p>{song.data.description}</p>}
             <div class="song-actions">
-              {song.data.audioUrl && <a class="arrowlink" href={song.data.audioUrl} target="_blank" rel="noopener noreferrer">LISTEN <span>↗</span></a>}
+              {song.data.audioUrl && <button class="arrowlink player-trigger" type="button" aria-expanded="false" aria-controls={`player-${i}`} data-audio-url={song.data.audioUrl}>LISTEN <span>＋</span></button>}
               <button class="arrowlink lyrics-trigger" type="button" data-lyrics-url={songHref(song.id)}>READ LYRICS <span>↗</span></button>
               <a class="song-permalink" href={songHref(song.id)} aria-label={`${song.data.title}の歌詞ページへのリンク`}>DIRECT LINK ↗</a>
             </div>
+            {song.data.audioUrl && <div class="player-panel" id={`player-${i}`} hidden><div class="player-mount"></div><a class="player-external" href={song.data.audioUrl} target="_blank" rel="noopener noreferrer">OPEN IN SOUNDCLOUD ↗</a></div>}
           </div>
         </article>)}
       </div>
@@ -44,6 +45,40 @@ const songHref = (id: string) => `${base}lyrics/${id}/`;
     <div class="lyrics-dialog-content" id="lyrics-dialog-content" aria-live="polite"></div>
   </dialog>
   <script>
+    document.querySelectorAll<HTMLButtonElement>('.player-trigger').forEach(button => {
+      button.addEventListener('click', () => {
+        const id = button.getAttribute('aria-controls');
+        const panel = id ? document.getElementById(id) : null;
+        const mount = panel?.querySelector<HTMLElement>('.player-mount');
+        const audioUrl = button.dataset.audioUrl;
+        if (!panel || !mount || !audioUrl) return;
+        const opening = panel.hidden;
+        document.querySelectorAll<HTMLButtonElement>('.player-trigger').forEach(other => {
+          other.setAttribute('aria-expanded', 'false');
+          const otherPanel = document.getElementById(other.getAttribute('aria-controls') || '');
+          if (otherPanel) {
+            otherPanel.hidden = true;
+            otherPanel.querySelector('.player-mount')?.replaceChildren();
+          }
+          const icon = other.querySelector('span');
+          if (icon) icon.textContent = '＋';
+        });
+        if (!opening) return;
+        const iframe = document.createElement('iframe');
+        iframe.title = 'SoundCloud audio player';
+        iframe.width = '100%';
+        iframe.height = '166';
+        iframe.allow = 'autoplay';
+        iframe.loading = 'lazy';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.src = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(audioUrl) + '&color=%23c85a31&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=false';
+        mount.replaceChildren(iframe);
+        panel.hidden = false;
+        button.setAttribute('aria-expanded', 'true');
+        const icon = button.querySelector('span');
+        if (icon) icon.textContent = '−';
+      });
+    });
     const dialog = document.querySelector<HTMLDialogElement>('#lyrics-dialog');
     const content = document.querySelector<HTMLElement>('#lyrics-dialog-content');
     document.querySelectorAll<HTMLButtonElement>('.lyrics-trigger').forEach(button => {
