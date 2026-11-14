@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Validate published songs
+        run: npm run validate:songs
+
       - name: Build Astro site
         run: npm run build
 
