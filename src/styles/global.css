@@ -38,3 +38,10 @@ button.arrowlink:hover{color:var(--orange);border-color:var(--orange)}
 .song-permalink{font-size:9px}
 .lyrics-dialog-content{padding:16px 20px 25px}
 }
+
+/* Expandable SoundCloud audio player */
+.player-panel[hidden]{display:none}
+.player-panel{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.player-mount iframe{display:block;width:100%;max-width:650px;border:0;border-radius:3px;background:#e4dfd1}
+.player-external{display:inline-block;margin-top:10px;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.08em;text-decoration:underline;text-underline-offset:3px}
+.player-external:hover{color:var(--orange)}
