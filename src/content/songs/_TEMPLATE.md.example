@@ -1,0 +1,14 @@
+---
+title: "曲名"
+year: 2026
+key: "C"
+bpm: 100
+description: "曲の紹介"
+published: true
+audioUrl: "https://soundcloud.com/artist/track"
+---
+
+ここに公開する歌詞を書く。  
+行を変えるときは行末に半角スペースを2つ。
+
+空行で段落を分ける。
