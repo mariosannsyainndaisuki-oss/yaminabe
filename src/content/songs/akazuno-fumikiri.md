@@ -6,6 +6,7 @@ bpm: 95
 description: "Rhodesを中心に制作したオリジナル曲。"
 featured: true
 published: true
+audioUrl: "https://on.soundcloud.com/gY9K4clwmpNlIARni7"
 ---
 
 どうして誰もが幸せに見える  
