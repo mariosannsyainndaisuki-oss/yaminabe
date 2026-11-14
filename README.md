@@ -51,3 +51,15 @@ Include that marker **only after the site owner explicitly asks to publish the f
 The privileged workflow checks: successful PR validation; run initiated by the repository owner; PR opened by the owner from the same repository; branch prefix; approval marker; matching validated head SHA; and changed paths limited to non-deleted `src/content/songs/*.md` files. It never checks out or runs untrusted PR code. GitHub branch rules still apply. If the merge is blocked by required checks or permissions, the PR stays open for manual review.
 
 **Important:** Verify that `Protect main` actually requires a PR and the `Validate songs and build` check, and has no bypass users. Also ensure GitHub Actions can create/approve pull requests if your repository settings require it. The first automatic publication should be tested on a harmless song-metadata-only PR. A passing build cannot confirm SoundCloud playback or lyric correctness.
+
+## Song descriptions and self liner notes
+
+Keep each song's `description` to one short sentence describing both the music and the theme. Do not use generic copy such as “lyrics and SoundCloud audio.”
+
+To publish optional artist-written liner notes, add a **single-line, quoted** `linerNotes` field to the song's YAML frontmatter, for example:
+
+```yaml
+linerNotes: "制作当時のことや、歌詞に込めた思いを自由に書く。"
+```
+
+Only songs with a nonempty `linerNotes` value display the LINER NOTES link and the dedicated section on the song page. Notes are not prefilled with AI-generated text. The field is optional; do not invent personal reflections. Keep YAML strings on one line and quote them. For multiline notes, ask to extend the content format first.
