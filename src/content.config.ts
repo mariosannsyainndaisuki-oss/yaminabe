@@ -9,6 +9,7 @@ const songs = defineCollection({
     key: z.string().optional(),
     bpm: z.number().optional(),
     description: z.string().optional(),
+    linerNotes: z.string().optional(),
     featured: z.boolean().default(false),
     published: z.boolean().default(false),
     audioUrl: z.string().url().optional(),
