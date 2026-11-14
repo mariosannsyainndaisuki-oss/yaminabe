@@ -1,0 +1,64 @@
+name: Auto-publish approved song changes
+
+on:
+  workflow_run:
+    workflows: ["Validate YAMINABE changes"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge-approved-songs:
+    if: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge only explicitly approved song-data PRs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const run = context.payload.workflow_run;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            // This privileged workflow NEVER checks out or executes PR code.
+            if (run.actor?.login !== owner) {
+              core.info('Not a repository-owner initiated run; skipping.');
+              return;
+            }
+            for (const candidate of run.pull_requests || []) {
+              const { data: pr } = await github.rest.pulls.get({
+                owner, repo, pull_number: candidate.number
+              });
+              if (pr.state !== 'open' || pr.draft || pr.base.ref !== 'main') continue;
+              if (pr.user.login !== owner || pr.head.repo?.full_name !== `${owner}/${repo}`) continue;
+              if (!pr.head.ref.startsWith('publish/song-')) continue;
+              if (pr.head.sha !== run.head_sha) {
+                core.info(`PR #${pr.number} changed since validation; skipping.`);
+                continue;
+              }
+              if (!/^YAMINABE-PUBLISH-APPROVED: yes$/m.test(pr.body || '')) {
+                core.info(`PR #${pr.number} lacks explicit publication marker; skipping.`);
+                continue;
+              }
+              const files = await github.paginate(github.rest.pulls.listFiles, {
+                owner, repo, pull_number: pr.number, per_page: 100
+              });
+              if (!files.length || files.some(f =>
+                f.status === 'removed' ||
+                !/^src\/content\/songs\/[a-z0-9][a-z0-9-]*\.md$/.test(f.filename)
+              )) {
+                core.info(`PR #${pr.number} includes non-song changes or deletions; skipping.`);
+                continue;
+              }
+              // GitHub applies the repository's branch ruleset and required checks here.
+              try {
+                const result = await github.rest.pulls.merge({
+                  owner, repo, pull_number: pr.number,
+                  sha: pr.head.sha, merge_method: 'squash',
+                  commit_title: `Publish YAMINABE songs (#${pr.number})`
+                });
+                core.info(`Merged PR #${pr.number}: ${result.data.merged}`);
+              } catch (error) {
+                core.warning(`Could not merge PR #${pr.number}: ${error.message}`);
+              }

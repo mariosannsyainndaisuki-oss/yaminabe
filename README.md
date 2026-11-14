@@ -35,3 +35,19 @@ The `validate.yml` workflow runs for pull requests into `main`. The `deploy.yml`
 To enforce a green PR check before merging, configure a branch ruleset for `main` requiring the `Validate songs and build` check. This is a **repository setting** and is not automatically enabled by adding the workflow. GitHub plan/repository restrictions may apply.
 
 The deploy job currently has no automated post-deployment browser or SoundCloud playback test; test embedded playback manually after changes. Automatic checks catch structural and build errors, not lyrical correctness, rights or creative approval.
+
+## Automatic publication (song data only)
+
+The `Auto-publish approved song changes` workflow can merge a song-only PR after the existing PR validation workflow succeeds. It does **not** auto-merge code or site-design changes.
+
+To opt in for a song publication, ChatGPT must create a branch named `publish/song-...` and a PR with the exact standalone line:
+
+```
+YAMINABE-PUBLISH-APPROVED: yes
+```
+
+Include that marker **only after the site owner explicitly asks to publish the final song**. Drafts, tentative changes, and normal PRs must never use it.
+
+The privileged workflow checks: successful PR validation; run initiated by the repository owner; PR opened by the owner from the same repository; branch prefix; approval marker; matching validated head SHA; and changed paths limited to non-deleted `src/content/songs/*.md` files. It never checks out or runs untrusted PR code. GitHub branch rules still apply. If the merge is blocked by required checks or permissions, the PR stays open for manual review.
+
+**Important:** Verify that `Protect main` actually requires a PR and the `Validate songs and build` check, and has no bypass users. Also ensure GitHub Actions can create/approve pull requests if your repository settings require it. The first automatic publication should be tested on a harmless song-metadata-only PR. A passing build cannot confirm SoundCloud playback or lyric correctness.
