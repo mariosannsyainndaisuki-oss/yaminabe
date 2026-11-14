@@ -62,3 +62,4 @@ jobs:
               } catch (error) {
                 core.warning(`Could not merge PR #${pr.number}: ${error.message}`);
               }
+            }
