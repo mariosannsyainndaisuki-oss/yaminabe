@@ -23,5 +23,7 @@ jobs:
         run: npm install
       - name: Validate published songs
         run: npm run validate:songs
+      - name: Check auto-publish JavaScript syntax
+        run: node scripts/check-auto-publish-syntax.mjs
       - name: Build Astro site
         run: npm run build
