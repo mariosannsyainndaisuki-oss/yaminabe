@@ -30,7 +30,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
   <title>{title}</title>
 </head>
 <body>
-  <header class="top"><div class="wrap topin"><a href={home} class="logo">YAMINABE<b>®</b></a><nav aria-label="メインナビゲーション"><a href={home}>HOME</a><a href={`${home}#music`}>MUSIC</a><a href={`${home}#lyrics`}>LYRICS</a><a href={`${home}#about`}>ABOUT</a></nav></div></header>
+  <header class="top"><div class="wrap topin"><a href={home} class="logo">YAMINABE<b>®</b></a><nav aria-label="メインナビゲーション"><a href={home}>HOME</a><a href={`${home}#music`}>MUSIC</a><a href={`${home}#about`}>ABOUT</a></nav></div></header>
   <main><slot /></main>
   <footer class="footer"><div class="wrap footerin"><span>© YAMINABE</span><span>OFFICIAL WEBSITE / 2026</span></div></footer>
 </body>
