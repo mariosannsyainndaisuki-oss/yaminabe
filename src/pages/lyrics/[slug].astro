@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths() {
+  const songs = await getCollection('songs', ({data}) => data.published);
+  return songs.map(song => ({params: {slug: song.id}, props: {song}}));
+}
+const {song} = Astro.props;
+const {Content} = await render(song);
+const base = import.meta.env.BASE_URL;
+---
+<Base title={`${song.data.title} | YAMINABE`} description={`${song.data.title} — YAMINABE 歌詞`}>
+  <article class="lyricspage"><div class="wrap"><div class="eyebrow">YAMINABE / LYRICS / THE POT</div><h1>{song.data.title}</h1><div class="meta">{[song.data.year, song.data.key && `KEY ${song.data.key}`, song.data.bpm && `${song.data.bpm} BPM`].filter(Boolean).join(' / ')}</div><div class="lyricsbody"><Content /></div>{song.data.audioUrl && <p><a class="arrowlink" href={song.data.audioUrl} target="_blank" rel="noopener noreferrer">LISTEN ↗</a></p>}<a class="arrowlink back" href={`${base}#lyrics`}>← BACK TO LYRICS</a></div></article>
+</Base>

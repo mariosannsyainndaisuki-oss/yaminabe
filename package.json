@@ -1,0 +1,8 @@
+{
+  "name": "yaminabe-official-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {"dev":"astro dev", "build":"astro build", "preview":"astro preview", "check":"astro check"},
+  "dependencies": {"astro":"^5.0.0"}
+}
