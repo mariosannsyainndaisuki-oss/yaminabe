@@ -1,6 +1,6 @@
 ---
 title: "形而上の女の子"
-description: "オリジナル曲「形而上の女の子」。"
+description: "「形而上の女の子」の歌詞とSoundCloud音源。"
 featured: false
 published: true
 audioUrl: "https://soundcloud.com/user-462656328/dldt1jrobwsg"
