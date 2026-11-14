@@ -45,3 +45,7 @@ button.arrowlink:hover{color:var(--orange);border-color:var(--orange)}
 .player-mount iframe{display:block;width:100%;max-width:650px;border:0;border-radius:3px;background:#e4dfd1}
 .player-external{display:inline-block;margin-top:10px;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.08em;text-decoration:underline;text-underline-offset:3px}
 .player-external:hover{color:var(--orange)}
+
+/* Optional artist-written liner notes on song pages */
+.liner-notes{border-top:1px solid var(--line);margin:38px 0 25px;padding-top:30px;max-width:730px}
+.liner-notes p{font-size:14px;line-height:2.2;white-space:pre-line;color:#4d4e47;margin:20px 0 0}
