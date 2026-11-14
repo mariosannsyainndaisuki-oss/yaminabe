@@ -2,14 +2,75 @@
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 const songs = (await getCollection('songs', ({data}) => data.published)).sort((a,b) => (b.data.year ?? 0) - (a.data.year ?? 0));
-const featured = songs.find(song => song.data.featured) ?? songs[0];
 const base = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/`;
-const songHref = (id) => `${base}lyrics/${id}/`;
+const songHref = (id: string) => `${base}lyrics/${id}/`;
 ---
 <Base>
-<section class="hero" id="home"><div class="wrap"><div class="eyebrow">INDEPENDENT MUSIC PROJECT</div><h1>YAMI<span>NABE.</span></h1><div class="herofoot"><p>ORIGINAL MUSIC / LYRICS / MORE<br />OFFICIAL WEBSITE</p><div class="roundel" aria-hidden="true">✳</div></div></div></section>
-<div class="ticker"><span>YAMINABE &nbsp; ✳ &nbsp; MUSIC &nbsp; ✳ &nbsp; LYRICS &nbsp; ✳ &nbsp; YAMINABE &nbsp; ✳ &nbsp; MUSIC &nbsp; ✳ &nbsp; LYRICS</span></div>
-<section class="section" id="music"><div class="wrap"><div class="sectionhead"><div><div class="eyebrow">01 / MUSIC</div><h2>SELECTED TRACK</h2></div><small>ORIGINAL SONGS</small></div>{featured && <div class="featured"><div class="featureart" aria-label="レコードのグラフィック"></div><div class="featureinfo"><div><div class="eyebrow">FEATURED {featured.data.year ? `/ ${featured.data.year}` : ''}</div><h3>{featured.data.title}</h3><p>{featured.data.key && `KEY ${featured.data.key}`}{featured.data.bpm && ` / ${featured.data.bpm} BPM`}<br />{featured.data.description}</p></div><div class="music-actions">{featured.data.audioUrl && <a class="arrowlink" href={featured.data.audioUrl} target="_blank" rel="noopener noreferrer">LISTEN ON SOUNDCLOUD <span>↗</span></a>}<a class="arrowlink" href={songHref(featured.id)}>VIEW LYRICS <span>↗</span></a></div></div></div>}</div></section>
-<section class="section" id="lyrics"><div class="wrap"><div class="sectionhead"><div><div class="eyebrow">02 / THE POT</div><h2>LYRICS ARCHIVE</h2></div><small>{String(songs.length).padStart(2,'0')} {songs.length === 1 ? 'SONG' : 'SONGS'}</small></div><div class="archive">{songs.map((song,i) => <a class="track" href={songHref(song.id)}><div class="cover"><span>{song.data.title}</span></div><div class="trackinfo"><small>TRACK {String(i+1).padStart(2,'0')} / {song.data.year ?? 'ARCHIVE'}</small><h3>{song.data.title}</h3></div></a>)}</div></div></section>
-<section class="section" id="about"><div class="wrap aboutgrid"><div><div class="eyebrow">03 / ABOUT</div><div class="sectionhead"><h2>YAMINABE.</h2></div><p>YAMINABE は、東京を拠点に活動する個人の音楽プロジェクト。<br /><br />ソウル、ファンク、AOR、インディーポップなど、さまざまな音楽から影響を受けながら、作詞・作曲・演奏・録音までを自宅で行っている。<br /><br />ジャンルにとらわれず、好きなものを好きなように混ぜ合わせる。そんな音楽の置き場所が、YAMINABE。</p></div><div><div class="eyebrow" style="margin-bottom:20px">LINKS</div><div class="links"><a href="#music">MUSIC <span>↗</span></a><a href="#lyrics">LYRICS / THE POT <span>↗</span></a>{featured?.data.audioUrl && <a href={featured.data.audioUrl} target="_blank" rel="noopener noreferrer">SOUNDCLOUD <span>↗</span></a>}</div></div></div></section>
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div class="eyebrow">INDEPENDENT MUSIC PROJECT / TOKYO</div>
+      <h1>YAMI<span>NABE.</span></h1>
+      <div class="herofoot"><p>SOUL / FUNK / AOR / INDIE POP<br />ORIGINAL MUSIC &amp; LYRICS</p><div class="roundel" aria-hidden="true">✳</div></div>
+    </div>
+  </section>
+  <section class="section songs-section" id="music">
+    <div class="wrap">
+      <div class="sectionhead"><div><div class="eyebrow">01 / MUSIC &amp; LYRICS</div><h2>SONGS</h2></div><small>{String(songs.length).padStart(2,'0')} {songs.length === 1 ? 'SONG' : 'SONGS'}</small></div>
+      <div class="songs-list">
+        {songs.map((song, i) => <article class="song-row">
+          <div class="song-cover" aria-hidden="true"><div class="song-record"></div></div>
+          <div class="song-info">
+            <div class="eyebrow">TRACK {String(i+1).padStart(2,'0')} / {song.data.year ?? 'ARCHIVE'}</div>
+            <h3>{song.data.title}</h3>
+            {song.data.description && <p>{song.data.description}</p>}
+            <div class="song-actions">
+              {song.data.audioUrl && <a class="arrowlink" href={song.data.audioUrl} target="_blank" rel="noopener noreferrer">LISTEN <span>↗</span></a>}
+              <button class="arrowlink lyrics-trigger" type="button" data-lyrics-url={songHref(song.id)}>READ LYRICS <span>↗</span></button>
+              <a class="song-permalink" href={songHref(song.id)} aria-label={`${song.data.title}の歌詞ページへのリンク`}>DIRECT LINK ↗</a>
+            </div>
+          </div>
+        </article>)}
+      </div>
+    </div>
+  </section>
+  <section class="section" id="about">
+    <div class="wrap aboutgrid">
+      <div><div class="eyebrow">02 / ABOUT</div><div class="sectionhead"><h2>YAMINABE.</h2></div><p>YAMINABE は、東京を拠点に活動する個人の音楽プロジェクト。<br /><br />ソウル、ファンク、AOR、インディーポップなど、さまざまな音楽から影響を受けながら、作詞・作曲・演奏・録音までを自宅で行っている。<br /><br />ジャンルにとらわれず、好きなものを好きなように混ぜ合わせる。そんな音楽の置き場所が、YAMINABE。</p></div>
+      <div><div class="eyebrow" style="margin-bottom:20px">LINKS</div><div class="links"><a href="#music">SONGS / LYRICS <span>↗</span></a>{songs.find(song => song.data.audioUrl)?.data.audioUrl && <a href={songs.find(song => song.data.audioUrl)!.data.audioUrl} target="_blank" rel="noopener noreferrer">SOUNDCLOUD <span>↗</span></a>}</div></div>
+    </div>
+  </section>
+  <dialog id="lyrics-dialog" class="lyrics-dialog" aria-label="歌詞">
+    <div class="lyrics-dialog-top"><span>YAMINABE / LYRICS</span><button type="button" class="lyrics-close" aria-label="閉じる">×</button></div>
+    <div class="lyrics-dialog-content" id="lyrics-dialog-content" aria-live="polite"></div>
+  </dialog>
+  <script>
+    const dialog = document.querySelector<HTMLDialogElement>('#lyrics-dialog');
+    const content = document.querySelector<HTMLElement>('#lyrics-dialog-content');
+    document.querySelectorAll<HTMLButtonElement>('.lyrics-trigger').forEach(button => {
+      button.addEventListener('click', async () => {
+        if (!dialog || !content) return;
+        const url = button.dataset.lyricsUrl;
+        if (!url) return;
+        content.textContent = '読み込み中…';
+        dialog.showModal();
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error('Lyrics unavailable');
+          const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+          const title = doc.querySelector('.lyricspage h1');
+          const lyrics = doc.querySelector('.lyricsbody');
+          if (!title || !lyrics) throw new Error('Lyrics not found');
+          content.replaceChildren(title.cloneNode(true), lyrics.cloneNode(true));
+        } catch {
+          content.replaceChildren(document.createTextNode('歌詞を読み込めませんでした。 '));
+          const link = document.createElement('a');
+          link.href = url;
+          link.textContent = '歌詞ページを開く ↗';
+          content.append(link);
+        }
+      });
+    });
+    document.querySelector('.lyrics-close')?.addEventListener('click', () => dialog?.close());
+    dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  </script>
 </Base>
